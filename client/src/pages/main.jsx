@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import '../styles/main.scss'
 
 export const Main = () => {
 	const [products, setProducts] = useState(null)
@@ -12,6 +13,23 @@ export const Main = () => {
 	}, [])
 
 	return products ? (
-		<div onClick={() => { console.log(products) }}>Hello WOrld</div>
+		<div className='main'>
+			<div onClick={() => { console.log(products) }} className='main-wrapper'>
+				<div className='prod-list'>
+					{products.map((item, id) => {
+						return (
+							<div key={id} className="prod-item">
+								<div className='prod-title'>
+									{item.name}
+								</div>
+								<div className='prod-price'>
+									{item.price}
+								</div>
+							</div>
+						)
+					})}
+				</div>
+			</div>
+		</div>
 	) : (null)
 }

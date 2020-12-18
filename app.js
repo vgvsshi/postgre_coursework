@@ -4,10 +4,10 @@ const config = require('config')
 
 const app = express()
 
+app.use(express.json())
 app.use('/api/orders', require('./routes/order-routes'))
 app.use('/api/products', require('./routes/product-routes'))
 
-app.use(express.json())
 const PORT = config.get('port') || 5000
 
 
