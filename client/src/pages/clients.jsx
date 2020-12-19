@@ -13,15 +13,9 @@ export const Clients = () => {
 
 	return user ? (
 		<ul className="collection">
-<<<<<<< Updated upstream
-			{user.map((item, ind) => {
-				return (
-					<li key={ind} className="collection-item">{item.name}</li>
-=======
 			{user.map((item, id) => {
 				return (
 					<li key={id} className="collection-item">{item.name}</li>
->>>>>>> Stashed changes
 				)
 			})}
 		</ul>
