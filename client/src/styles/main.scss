@@ -7,6 +7,7 @@
 	justify-content: center;
 	.main-wrapper {
 		max-width: 1200px;
+		width: 100%;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
@@ -30,13 +31,22 @@
 			align-items: center;
 			margin: -10px;
 			padding-bottom: 30px;
+			margin-bottom: 20px;
+			border-bottom: 2px solid #bdbdbd;
 			.prod-item {
 				border: 1px solid #f2f2f2;
 				box-shadow: 1px 1px 5px 1px rgba(242, 242, 242, 1);
 				width: calc(33.333% - 20px);
 				margin: 10px;
 				padding: 20px;
+				position: relative;
+				.delete-icon {
+					position: absolute;
+					top: 10px;
+					right: 10px;
+				}
 				.prod-title {
+					padding-right: 20px;
 					height: 80px;
 					font-size: 25px;
 					line-height: 25px;

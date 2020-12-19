@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { useHttp } from '../hooks/http.hook'
 import '../styles/main.scss'
 
 export const Main = () => {
 	const [products, setProducts] = useState(null)
+	const [update, setUpdate] = useState(true)
 	const [cart, setCart] = useState([])
 	const [orderPopUp, setOrderPopUp] = useState(false)
 	const [form, setForm] = useState({ name: "", surname: "", phone: "", email: "", company: false })
+	const { request, loading } = useHttp()
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(async () => {
-		const data = await fetch('/api/products')
-
-		const prods = await data.json()
-		setProducts(prods)
-	}, [])
 
 	useEffect(() => {
 		window.M.updateTextFields()
@@ -22,6 +18,29 @@ export const Main = () => {
 	const changeHadler = event => {
 		setForm({ ...form, [event.target.name]: event.target.value })
 	}
+
+	const deleteProd = useCallback(async (id) => {
+		try {
+			await request(`/api/products/delete`, 'POST', { id: id })
+		} catch (error) {
+			console.log(error.message)
+		}
+	}, [request])
+
+	const getAllProds = useCallback(async () => {
+		try {
+			let prods = await request(`/api/products`, 'GET', null)
+			setProducts(prods)
+		} catch (error) {
+			console.log(error.message)
+		}
+	}, [request])
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		getAllProds()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [update])
 
 	const byField = (field) => {
 		return (a, b) => a[field] > b[field] ? 1 : -1;
@@ -52,7 +71,7 @@ export const Main = () => {
 		return totalPrice = totalPrice + item.price * item.amount
 	})
 
-	return products && products.length !== 0 ? (
+	return products && products.length !== 0 && !loading ? (
 		<div className='main' >
 			<div className='main-wrapper'>
 				<div onClick={() => { console.log(cart) }} className='main-title'>Продукты</div>
@@ -70,6 +89,7 @@ export const Main = () => {
 									Цена: {item.price} RUB
 								</div>
 								<button onClick={() => { addToCart(item.id) }} className='add-to-cart teal darken-3'>В корзину</button>
+								<i style={{ cursor: 'pointer' }} onClick={() => { deleteProd(item.id); setUpdate(!update) }} className="material-icons delete-icon">close</i>
 							</div>
 						)
 					})}
