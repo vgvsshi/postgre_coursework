@@ -2,7 +2,6 @@ const { Router } = require('express')
 const router = Router()
 const { db } = require('../db')
 
-
 router.get('/', async (req, res) => {
 	const clients = await db.query('SELECT * FROM client')
 	res.json(clients.rows)
@@ -12,7 +11,7 @@ router.post('/', async (req, res) => {
 	const { name, surname, phone, email, company } = req.body
 	const variables = [name, surname, phone, email]
 
-	if(company){
+	if (company) {
 		variables.push(company)
 	}
 

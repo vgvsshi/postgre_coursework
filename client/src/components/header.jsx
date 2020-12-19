@@ -9,8 +9,7 @@ export const Header = () => {
 				<ul id="nav-mobile" className="right hide-on-med-and-down">
 					<li><Link to='/'>Заказы</Link></li>
 					<li><Link to='/workers'>Рабочие</Link></li>
-					<li><Link to='/clients'>Клиенты</Link></li>
-					{/* <li><Link><a href="/">Машины</a></Link></li */}
+					<li><Link to='/clients'>Пользователи</Link></li>
 				</ul>
 			</div>
 		</nav >

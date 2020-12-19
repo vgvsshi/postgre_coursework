@@ -52,7 +52,7 @@ export const Main = () => {
 		return totalPrice = totalPrice + item.price * item.amount
 	})
 
-	return products ? (
+	return products && products.length !== 0 ? (
 		<div className='main' >
 			<div className='main-wrapper'>
 				<div onClick={() => { console.log(cart) }} className='main-title'>Продукты</div>
@@ -172,5 +172,20 @@ export const Main = () => {
 				}
 			</div>
 		</div>
-	) : (null)
+	) :
+		(
+			<div className='main'>
+				<div className="preloader-wrapper big active">
+					<div className="spinner-layer spinner-green-only">
+						<div className="circle-clipper left">
+							<div className="circle"></div>
+						</div><div className="gap-patch">
+							<div className="circle"></div>
+						</div><div className="circle-clipper right">
+							<div className="circle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
 }
