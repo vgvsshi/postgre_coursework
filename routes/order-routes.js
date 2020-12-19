@@ -4,7 +4,8 @@ const db = require('../db')
 
 
 router.get('/', async (req, res) => {
-
+	const orders = await db.query('SELECT * FROM orders')
+	res.json(orders.rows)
 })
 
 router.post('/create-order', async (req, res) => {
