@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const router = Router()
-const { db } = require('../db')
+const db = require('../db')
 
 router.get('/', async (req, res) => {
 	const clients = await db.query('SELECT * FROM client')
