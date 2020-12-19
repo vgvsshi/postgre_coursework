@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Header = () => {
 	return (
-		<nav>
+		<nav className='teal darken-3'>
 			<div style={{ padding: '0 50px' }} className="nav-wrapper">
 				<Link to='/' className="brand-logo">PostgreSQL</Link>
 				<ul id="nav-mobile" className="right hide-on-med-and-down">

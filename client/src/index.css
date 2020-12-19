@@ -1,1 +1,6 @@
 @import "~materialize-css/dist/css/materialize.min.css";
+
+.lock {
+	padding-right: 17px;
+	overflow: hidden;
+}
