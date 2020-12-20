@@ -7,11 +7,11 @@ import { useAuth } from '../hooks/auth.hook';
 export const Clients = () => {
 
 	const [users, setUsers] = useState([])
-	const {request, loading} = useHttp()
+	const { request, loading } = useHttp()
 	const { state, dispatch } = useAppState()
-	
+
 	useEffect(async () => {
-		if(state.token !== null){
+		if (state.token !== null) {
 			const response = await request('/api/users', 'GET', null, { 'Authorization': 'Bearer ' + state.token })
 			setUsers(response)
 		}
@@ -21,24 +21,22 @@ export const Clients = () => {
 		<div className='main' >
 			<div className='main-wrapper'>
 				<div className='main-title'>Пользователи</div>
-					{
-						!loading ?
-							<ul style={{marginTop: '10px'}} className="collection">
-								{users.map((item, id) => {
-									return (
-										<li key={id} className="collection-item">
-											<Link to={{
-												pathname: `/admin/change-user/${item.id}`,
-												state: {
-													id: item.id
-												}
-											}}>{item.name}</Link>
-										</li>
-									)
-								})}
-							</ul> 
-							:
-							<div className='main'>
+				{
+					!loading ?
+						<ul style={{ marginTop: '10px', width: '100%' }} className="collection">
+							{users.map((item, id) => {
+								return (
+									<Link key={id} className="collection-item" to={{
+										pathname: `/admin/change-user/${item.id}`,
+										state: {
+											id: item.id
+										}
+									}}>{item.name}</Link>
+								)
+							})}
+						</ul>
+						:
+						<div className='main'>
 							<div className="preloader-wrapper big active">
 								<div className="spinner-layer spinner-green-only">
 									<div className="circle-clipper left">
@@ -51,7 +49,7 @@ export const Clients = () => {
 								</div>
 							</div>
 						</div>
-					}
+				}
 
 			</div>
 		</div>
