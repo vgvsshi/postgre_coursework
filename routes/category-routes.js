@@ -1,18 +1,19 @@
 const { Router } = require('express')
 const router = Router()
-const db = require('../db')
+const { pool, reconnect } = require('../db')
+const authToken = require('./authMiddleware')
 
-router.get('/', async (req, res) => {
+router.get('/', authToken, async (req, res) => {
+	const db = reconnect(req.payload.type)
 	const categories = await db.query('SELECT * FROM category')
 	res.json(categories.rows)
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authToken, async (req, res) => {
 	const { title } = req.body
-
+	const db = reconnect(req.payload.type)
+	
 	const candidate = await db.query(`SELECT category.name FROM category WHERE category.name = '${title}'`)
-
-	console.log(candidate)
 
 	if (candidate.rows.length !== 0) {
 		res.status(400).json({ message: 'Категория с таким названием уже существует' })

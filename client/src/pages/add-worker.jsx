@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useHttp } from '../hooks/http.hook'
 
-export const AddProd = () => {
+export const AddWorker = () => {
 	const [categories, setCategory] = useState(null)
 	const { request, loading, error, clearError } = useHttp()
 	const [form, setForm] = useState({ title: "", price: "", category: "", quantity: "" })

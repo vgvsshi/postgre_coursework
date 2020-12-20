@@ -3,11 +3,10 @@ import { useHttp } from '../hooks/http.hook'
 import '../styles/main.scss'
 
 export const Main = () => {
-	const [products, setProducts] = useState(null)
-	const [update, setUpdate] = useState(true)
+	const [products, setProducts] = useState([])
 	const [cart, setCart] = useState([])
 	const [orderPopUp, setOrderPopUp] = useState(false)
-	const [form, setForm] = useState({ name: "", surname: "", phone: "", email: "", company: false })
+	const [form, setForm] = useState({ name: "", surname: "", phone: "", email: "", company: '' })
 	const { request, loading } = useHttp()
 
 
@@ -19,14 +18,6 @@ export const Main = () => {
 		setForm({ ...form, [event.target.name]: event.target.value })
 	}
 
-	const deleteProd = useCallback(async (id) => {
-		try {
-			await request(`/api/products/delete`, 'POST', { id: id })
-		} catch (error) {
-			console.log(error.message)
-		}
-	}, [request])
-
 	const getAllProds = useCallback(async () => {
 		try {
 			let prods = await request(`/api/products`, 'GET', null)
@@ -36,11 +27,9 @@ export const Main = () => {
 		}
 	}, [request])
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		getAllProds()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [update])
+	}, [])
 
 	const byField = (field) => {
 		return (a, b) => a[field] > b[field] ? 1 : -1;
@@ -71,7 +60,7 @@ export const Main = () => {
 		return totalPrice = totalPrice + item.price * item.amount
 	})
 
-	return products && products.length !== 0 && !loading ? (
+	return products && !loading ? (
 		<div className='main' >
 			<div className='main-wrapper'>
 				<div onClick={() => { console.log(cart) }} className='main-title'>Продукты</div>
@@ -89,7 +78,6 @@ export const Main = () => {
 									Цена: {item.price} RUB
 								</div>
 								<button onClick={() => { addToCart(item.id) }} className='add-to-cart teal darken-3'>В корзину</button>
-								<i style={{ cursor: 'pointer' }} onClick={() => { deleteProd(item.id); setUpdate(!update) }} className="material-icons delete-icon">close</i>
 							</div>
 						)
 					})}
@@ -150,39 +138,17 @@ export const Main = () => {
 										<input onChange={changeHadler} id="phone" value={form.phone} type="tel" name='phone' className="validate" />
 										<label htmlFor="phone">Телефон</label>
 									</div>
-									<p>
-										<label>
-											<input
-												className="with-gap"
-												name="company"
-												type="radio"
-												checked={form.company === false}
-												onChange={(e) => {
-													setForm({ ...form, company: false })
-												}} />
-											<span>Физическое лицо</span>
-										</label>
-									</p>
-									<p>
-										<label>
-											<input
-												className="with-gap"
-												name="company"
-												type="radio"
-												checked={form.company === true}
-												onChange={(e) => {
-													setForm({ ...form, company: true })
-												}} />
-											<span>Юридическое лицо</span>
-										</label>
-									</p>
+									<div className="input-field col s12">
+										<input onChange={changeHadler} id="company" value={form.company} type="tel" name='company' className="validate" />
+										<label htmlFor="company">Компания (если Вы физическое лицо - оставьте поле пустым)</label>
+									</div>
 									<div className='sum'>
 										Сумма заказа: {totalPrice} RUB
 									</div>
 								</div>
 							</form>
 							<div className='btn-wrap'>
-								<button disabled={!(form.name && form.surname && form.phone && form.email)} onClick={() => { console.log({ ...form, order: [...cart], sum: totalPrice }) }} className='make-an-order'>
+								<button onClick={() => { console.log({ ...form, products: [...cart], sum: totalPrice }) }} className='make-an-order'>
 									Отправить заявку
 								</button>
 							</div>
