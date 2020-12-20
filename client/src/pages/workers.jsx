@@ -15,9 +15,8 @@ export const Workers = () => {
 	}, [])
 
 	return workers ? (
-		<div className='main' >
-			<div className='main-wrapper'>
-				<div className='main-title'>Рабочие</div>
+		<div >
+				<h3>Рабочие</h3>
 
 					<ul className="collection">
 						<li><Link to='/admin/add-worker'>Добавить рабочего</Link></li>
@@ -26,11 +25,17 @@ export const Workers = () => {
 					<ul style={{marginTop: '10px'}} className="collection">
 						{workers.map((item, id) => {
 							return (
-								<li key={id} className="collection-item">{item.name}</li>
+								<li key={id} className="collection-item">
+									<Link to={{
+										pathname: `/admin/change-worker/${item.id}`,
+										state: {
+											id: item.id
+										}
+									}}>{item.name}</Link>
+								</li>
 							)
 						})}
 					</ul>
-			</div>
 		</div>
 	) : (null)
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useHttp } from '../hooks/http.hook'
 import '../styles/main.scss'
 import { useAppState } from '../utils/innercontext'
@@ -6,14 +7,9 @@ import { useAppState } from '../utils/innercontext'
 export const Main = () => {
 	const [products, setProducts] = useState([])
 	const [cart, setCart] = useState([])
-	const [orderPopUp, setOrderPopUp] = useState(false)
-	const {state} = useAppState()
+	const { state } = useAppState()
 	const { request, loading } = useHttp()
-
-
-	useEffect(() => {
-		window.M.updateTextFields()
-	}, [orderPopUp])
+	const history = useHistory()
 
 	const getAllProds = useCallback(async () => {
 		try {
@@ -57,6 +53,16 @@ export const Main = () => {
 		return totalPrice = totalPrice + item.price * item.amount
 	})
 
+	const sendOrder = async () =>{
+		if(state.token){
+			const what = await request('/api/orders', 'POST', { token: state.token, products: [...cart], sum: totalPrice })
+			console.log(what);
+			setCart(null)
+		} else{
+			history.push('/login')
+		}
+	}
+
 	return products && !loading ? (
 		<div className='main' >
 			<div className='main-wrapper'>
@@ -98,32 +104,10 @@ export const Main = () => {
 				{
 					cart.length !== 0 ?
 						<button
-							disabled={orderPopUp}
 							className='order-btn'
 							onClick={() => {
-								setOrderPopUp(true)
-								document.querySelector("body").classList.add("lock")
+								sendOrder()
 							}}>Сделать заказ</button> :
-						(null)
-				}
-				{
-					orderPopUp ?
-						<div className='order-inner'>
-							<div
-								onClick={() => {
-									setOrderPopUp(false)
-									document.querySelector("body").classList.remove("lock")
-								}}
-								className='close-order'>
-								&#10006;
-							</div>
-							<div className='btn-wrap'>
-								<button onClick={() => { console.log({ token: state.token, products: [...cart], sum: totalPrice }) }} className='make-an-order'>
-									Отправить заявку
-								</button>
-							</div>
-						</div>
-						:
 						(null)
 				}
 			</div>

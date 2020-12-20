@@ -23,6 +23,11 @@ export const Products = () => {
 	return (
 		<div>
 			<h3>Продукты</h3>
+
+			<ul className="collection">
+				<li><Link to='/admin/add-product'>Добавить товар</Link></li>
+			</ul>
+
 			<ul style={{marginTop: '10px'}} className="collection">
 				{products.map((item, id) => {
 					return (
