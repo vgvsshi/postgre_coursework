@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import { useAppState } from '../utils/innercontext'
+import M from 'materialize-css'
 
 export const ChangeUser = (props) => {
 	const id = props.location.state.id
@@ -37,20 +38,28 @@ export const ChangeUser = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
+	useEffect(() => {
+		M.updateTextFields()
+	}, [user])
+
 	return user ? (
 		<div className='container'>
-			<div className='center-align' style={{ paddingTop: '20px', fontSize: '30px' }}>
+			<div className='center-align' style={{ paddingTop: '20px', fontSize: '30px', marginBottom: '20px' }}>
 				Изменить тип пользователя
 			</div>
 
-			<h4>{user.name}</h4>
-			<h4>{user.surname}</h4>
-			<h4>{user.phone}</h4>
-			<h4>{user.mail}</h4>
-			<h4>{user.company}</h4>
 
-			<div className="input-field col s12">
+			<ul class="collection">
+				<li class="collection-item">{user.name}</li>
+				<li class="collection-item">{user.surname}</li>
+				<li class="collection-item">{user.phone}</li>
+				<li class="collection-item">{user.mail}</li>
+				<li class="collection-item">{user.company}</li>
+			</ul>
+
+			<div className="input-field col s12" style={{ marginTop: '30px' }}>
 				<input onChange={changeHadler} value={user.type} id="type" name='type' type="text" className="validate" />
+				<label for="type">Введите тип пользователя</label>
 			</div>
 
 			<div className='center-align' style={{ paddingTop: '20px' }}>
