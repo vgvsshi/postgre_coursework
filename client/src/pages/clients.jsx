@@ -10,11 +10,13 @@ export const Clients = () => {
 	const { request, loading } = useHttp()
 	const { state, dispatch } = useAppState()
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(async () => {
 		if (state.token !== null) {
 			const response = await request('/api/users', 'GET', null, { 'Authorization': 'Bearer ' + state.token })
 			setUsers(response)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.token])
 
 	return (

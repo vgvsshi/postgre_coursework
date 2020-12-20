@@ -6,42 +6,39 @@ import { useAppState } from '../utils/innercontext'
 export const Products = () => {
 	const [products, setProducts] = useState([])
 	const { request, loading } = useHttp()
-	
+
 	const getAllProds = useCallback(async () => {
 		try {
 			let prods = await request(`/api/products`, 'GET', null)
 			setProducts(prods)
 		} catch (error) {
-			console.log('PRODUCTS',error.message)
+			console.log('PRODUCTS', error.message)
 		}
 	}, [request])
 
 	useEffect(() => {
 		getAllProds()
 	}, [])
-	
+
 	return (
-		<div>
-			<h3>Продукты</h3>
+		<div className='main'>
+			<div className='main-wrapper'>
+				<div className='main-title'>Продукты</div>
+				<Link style={{ marginBottom: '20px' }} className='btn waves-effect waves-light teal darken-3' to='/admin/add-product'>Добавить товар</Link>
 
-			<ul className="collection">
-				<li><Link to='/admin/add-product'>Добавить товар</Link></li>
-			</ul>
-
-			<ul style={{marginTop: '10px'}} className="collection">
-				{products.map((item, id) => {
-					return (
-						<li key={id} className="collection-item">
-							<Link to={{
+				<ul style={{ marginTop: '10px', width: '100%' }} className="collection">
+					{products.map((item, id) => {
+						return (
+							<Link key={id} className="collection-item" to={{
 								pathname: `/admin/change-product/${item.id}`,
 								state: {
 									id: item.id
 								}
 							}}>{item.name}</Link>
-						</li>
-					)
-				})}
-			</ul>
+						)
+					})}
+				</ul>
+			</div>
 		</div>
 	)
 }
