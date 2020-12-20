@@ -26,15 +26,18 @@ export const Clients = () => {
 							<ul style={{marginTop: '10px'}} className="collection">
 								{users.map((item, id) => {
 									return (
-										<li key={id} className="collection-item"><Link to={{
-											pathname: `/admin/change-user/${item.id}`,
-											state: {
-												id: item.id
-											}
-										}}>{item.name}</Link></li>
+										<li key={id} className="collection-item">
+											<Link to={{
+												pathname: `/admin/change-user/${item.id}`,
+												state: {
+													id: item.id
+												}
+											}}>{item.name}</Link>
+										</li>
 									)
 								})}
-							</ul> :
+							</ul> 
+							:
 							<div className='main'>
 							<div className="preloader-wrapper big active">
 								<div className="spinner-layer spinner-green-only">

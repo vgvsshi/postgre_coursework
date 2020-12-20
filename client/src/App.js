@@ -13,6 +13,7 @@ import { Register } from './pages/register';
 import 'materialize-css'
 import { Login } from './pages/login';
 import { ChangeUser } from './pages/change-user';
+import { ChangeProduct } from './pages/change-product';
 
 function App() {
 	return (
@@ -38,6 +39,7 @@ function App() {
 				<Route path="/admin/add-prod">
 					<AddProd />
 				</Route>
+				<Route path="/admin/change-product/:handle" component={ChangeProduct} />
 				<Route path="/admin/categories">
 					<Categories />
 				</Route>

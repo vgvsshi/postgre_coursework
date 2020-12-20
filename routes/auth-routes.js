@@ -27,7 +27,7 @@ router.post(
 		const querystring = 
 		`INSERT INTO "user" (name, surname, phone, mail, password${company ? ', company' : ''}) values ($1, $2, $3, $4, $5${company ? ', $6' : ''}) RETURNING *`
 
-		const newClient = await pool.query(querystring, variables).catch(e => console.log(e))
+		const newClient = await pool.query(querystring, variables).catch(e => console.log('AUTH_ROUTES', e))
 
 		const token = jwt.sign(
 			{ type: newClient.rows[0].type, phone: newClient.rows[0].phone },
@@ -66,7 +66,7 @@ router.post(
 			res.json({ token })
 
 		} catch (error) {
-			console.log(error.message)
+			console.log('AUTH_ROUTES 2',error.message)
 			res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова!' })
 		}
 

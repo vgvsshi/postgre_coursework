@@ -23,7 +23,7 @@ export const Main = () => {
 			let prods = await request(`/api/products`, 'GET', null)
 			setProducts(prods)
 		} catch (error) {
-			console.log(error.message)
+			console.log('MAIN', error.message)
 		}
 	}, [request])
 

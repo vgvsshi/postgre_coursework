@@ -26,7 +26,6 @@ const appStateReducer = (state, action) => {
 		}
 
 		default: {
-			console.log('test');
 			return state
 		}
 

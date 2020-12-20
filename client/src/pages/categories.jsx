@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import { useAppState } from '../utils/innercontext'
 
-export const Products = () => {
+export const Categories = () => {
 	const [products, setProducts] = useState([])
 	const { request, loading } = useHttp()
+	const { state } = useAppState()
 	
-	const getAllProds = useCallback(async () => {
+	const getAllCategories = useCallback(async () => {
 		try {
-			let prods = await request(`/api/products`, 'GET', null)
+			let prods = await request(`/api/categories`, 'GET', null, { 'Authorization': 'Bearer ' + state.token })
 			setProducts(prods)
 		} catch (error) {
 			console.log(error.message)
@@ -16,7 +17,7 @@ export const Products = () => {
 	}, [request])
 
 	useEffect(() => {
-		getAllProds()
+		getAllCategories()
 	}, [])
 
 	return (
@@ -26,13 +27,7 @@ export const Products = () => {
 				return (
 					<div key={id} >
 						<div>
-							{item.product_title}
-						</div>
-						<div>
-							Категория: {item.category_title}
-						</div>
-						<div>
-							Цена: {item.price} RUB
+							{item.name}
 						</div>
 					</div>
 				)

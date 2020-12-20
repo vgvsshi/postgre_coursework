@@ -15,7 +15,7 @@ export const AddProd = () => {
 			let allCategory = await request('/api/categories', 'GET', null)
 			setCategory(allCategory)
 		} catch (e) {
-			console.log(e)
+			console.log('ADD_PROD.JSX', e)
 		}
 	}, [request])
 

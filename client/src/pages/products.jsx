@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { useHttp } from '../hooks/http.hook'
 import { useAppState } from '../utils/innercontext'
 
@@ -11,33 +12,31 @@ export const Products = () => {
 			let prods = await request(`/api/products`, 'GET', null)
 			setProducts(prods)
 		} catch (error) {
-			console.log(error.message)
+			console.log('PRODUCTS',error.message)
 		}
 	}, [request])
 
 	useEffect(() => {
 		getAllProds()
 	}, [])
-
+	
 	return (
-		!loading ?
 		<div>
-			{products.map((item, id) => {
-				return (
-					<div key={id} >
-						<div>
-							{item.product_title}
-						</div>
-						<div>
-							Категория: {item.category_title}
-						</div>
-						<div>
-							Цена: {item.price} RUB
-						</div>
-					</div>
-				)
-			})}
-		</div> :
-		<div>Загрузка...</div>
+			<h3>Продукты</h3>
+			<ul style={{marginTop: '10px'}} className="collection">
+				{products.map((item, id) => {
+					return (
+						<li key={id} className="collection-item">
+							<Link to={{
+								pathname: `/admin/change-product/${item.id}`,
+								state: {
+									id: item.id
+								}
+							}}>{item.name}</Link>
+						</li>
+					)
+				})}
+			</ul>
+		</div>
 	)
 }

@@ -8,7 +8,6 @@ export const useAuth = () => {
 	const {state, dispatch} = useAppState()
 
 	const login = useCallback((jwtToken) => {
-		console.log('IM HERE');
 		dispatch({type: "SET_TOKEN", payload: jwtToken})
 		localStorage.setItem(storageName, JSON.stringify({token: jwtToken}))
 	}, [])
@@ -22,7 +21,6 @@ export const useAuth = () => {
 		
 		const data = JSON.parse(localStorage.getItem(storageName))
 		if (data && data.token) {
-			console.log('что...');
 			login(data.token)
 		}
 

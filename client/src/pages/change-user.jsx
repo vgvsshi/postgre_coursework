@@ -17,7 +17,7 @@ export const ChangeUser = (props) => {
 			let testuser = await request(`/api/users/${id}`, 'GET', null, { 'Authorization': 'Bearer ' + state.token })
 			setUser(testuser[0])
 		} catch (e) {
-			console.log(e)
+			console.log('CHANGE_USER', e)
 		}
 	}, [request])
 
@@ -27,7 +27,7 @@ export const ChangeUser = (props) => {
 			window.M.toast({ html: `Тип изменён` })
 			// setTimeout(()=> window.location.replace("http://localhost:3000/"), 800)
 		} catch (e) {
-			console.log(e);
+			console.log('CHANGE_USER 2', e);
 	  }
 	}
 
@@ -45,6 +45,7 @@ export const ChangeUser = (props) => {
 			<h4>{user.surname}</h4>
 			<h4>{user.phone}</h4>
 			<h4>{user.mail}</h4>
+			<h4>{user.company}</h4>
 
 			<div className="input-field col s12">
 				<input onChange={changeHadler} value={user.type} id="type" name='type' type="text" className="validate" />
