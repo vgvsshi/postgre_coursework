@@ -18,6 +18,8 @@ export const Clients = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.token])
 
+	useEffect(()=> console.log(users), [users])
+
 	return (
 		<div className='main' >
 			<div className='main-wrapper'>
@@ -25,16 +27,18 @@ export const Clients = () => {
 				{
 					!loading ?
 						<ul style={{ marginTop: '10px', width: '100%' }} className="collection">
-							{users.map((item, id) => {
-								return (
-									<Link key={id} className="collection-item" to={{
-										pathname: `/admin/change-user/${item.id}`,
-										state: {
-											id: item.id
-										}
-									}}>{item.name}</Link>
-								)
-							})}
+							{
+								users.map((item, id) => {
+									return (
+										<Link key={id} className="collection-item" to={{
+											pathname: `/admin/change-user/${item.id}`,
+											state: {
+												id: item.id
+											}
+										}}>{item.name}</Link>
+									)
+								})
+							}
 						</ul>
 						:
 						<div className='main'>

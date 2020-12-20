@@ -10,13 +10,16 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', authToken, async (req, res) => {
 	const { id } = req.params
-	const candidate = await pool.query(`SELECT * FROM product WHERE id = $1`, [id]).catch(e => res.json(e))
+	console.log('ROLE', req.payload.type);	
+	const db = reconnect(req.payload.type)
+	const candidate = await db.query(`SELECT * FROM product WHERE id = $1`, [id]).catch(e => res.json(e))
 	res.json(candidate)
 
 })
 
 router.post('/', authToken, async (req, res) => {
 	const { name, price, category_id, quantity } = req.body
+	console.log('ROLE', req.payload.type);	
 	const db = reconnect(req.payload.type)
 
 	const candidate = await db.query(`SELECT name FROM product WHERE name = '${name}'`)
@@ -26,12 +29,18 @@ router.post('/', authToken, async (req, res) => {
 		return
 	}
 
-	await db.query('INSERT INTO product (name, price, category_id, quantity) values ($1, $2, $3, $4) RETURNING *', [name, price, category_id, quantity]).catch(e => res.json(e))
-	res.status(200).json({message: 'Продукт добавлен!'})
+	try{
+		await db.query('INSERT INTO product (name, price, category_id, quantity) values ($1, $2, $3, $4) RETURNING *', [name, price, category_id, quantity])
+		res.status(200).json({message: 'Продукт добавлен!'})
+	} catch (e) {
+		console.log(e);
+		res.status(400).json(e)
+	}
 })
 
 router.patch('/:id', authToken, async (req, res) => {
 	const { id, name, price, category_id, quantity } = req.body
+	console.log(req.payload.type);
 	const db = reconnect(req.payload.type)
 	try{
 		await db.query('UPDATE product SET name = $1, price = $2, category_id = $3, quantity = $4 WHERE id = $5 RETURNING *', [name, price, category_id, quantity, id])
