@@ -3,7 +3,6 @@ const router = Router()
 const { pool } = require('../db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const authToken = require('./authMiddleware')
 
 router.post(
 	'/register',

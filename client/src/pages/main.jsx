@@ -1,22 +1,19 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import '../styles/main.scss'
+import { useAppState } from '../utils/innercontext'
 
 export const Main = () => {
 	const [products, setProducts] = useState([])
 	const [cart, setCart] = useState([])
 	const [orderPopUp, setOrderPopUp] = useState(false)
-	const [form, setForm] = useState({ name: "", surname: "", phone: "", email: "", company: '' })
+	const {state} = useAppState()
 	const { request, loading } = useHttp()
 
 
 	useEffect(() => {
 		window.M.updateTextFields()
 	}, [orderPopUp])
-
-	const changeHadler = event => {
-		setForm({ ...form, [event.target.name]: event.target.value })
-	}
 
 	const getAllProds = useCallback(async () => {
 		try {
@@ -69,10 +66,10 @@ export const Main = () => {
 						return (
 							<div key={id} className="prod-item">
 								<div className='prod-title'>
-									{item.product_title}
+									{item.name}
 								</div>
 								<div className='prod-category'>
-									Категория: {item.category_title}
+									Категория: {item.name}
 								</div>
 								<div className='prod-price'>
 									Цена: {item.price} RUB
@@ -88,7 +85,7 @@ export const Main = () => {
 						return (
 							<div key={id} className='cart-item'>
 								<span className='cartItem-title'>
-									{item.product_title} x {item.amount}
+									{item.name} x {item.amount}
 								</span>
 								<span className='cartItem-price'>
 									{item.price} RUB
@@ -120,35 +117,8 @@ export const Main = () => {
 								className='close-order'>
 								&#10006;
 							</div>
-							<form>
-								<div className="row">
-									<div className="input-field col s12">
-										<input onChange={changeHadler} id="name" value={form.name} name='name' type="text" className="validate" />
-										<label htmlFor="name">Имя</label>
-									</div>
-									<div className="input-field col s12">
-										<input onChange={changeHadler} id="surname" value={form.surname} name='surname' type="text" className="validate" />
-										<label htmlFor="surname">Фамилия</label>
-									</div>
-									<div className="input-field col s12">
-										<input onChange={changeHadler} id="email" value={form.email} name='email' type="email" className="validate" />
-										<label htmlFor="email">Email</label>
-									</div>
-									<div className="input-field col s12">
-										<input onChange={changeHadler} id="phone" value={form.phone} type="tel" name='phone' className="validate" />
-										<label htmlFor="phone">Телефон</label>
-									</div>
-									<div className="input-field col s12">
-										<input onChange={changeHadler} id="company" value={form.company} type="tel" name='company' className="validate" />
-										<label htmlFor="company">Компания (если Вы физическое лицо - оставьте поле пустым)</label>
-									</div>
-									<div className='sum'>
-										Сумма заказа: {totalPrice} RUB
-									</div>
-								</div>
-							</form>
 							<div className='btn-wrap'>
-								<button onClick={() => { console.log({ ...form, products: [...cart], sum: totalPrice }) }} className='make-an-order'>
+								<button onClick={() => { console.log({ token: state.token, products: [...cart], sum: totalPrice }) }} className='make-an-order'>
 									Отправить заявку
 								</button>
 							</div>
