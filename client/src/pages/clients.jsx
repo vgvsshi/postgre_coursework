@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useHttp } from '../hooks/http.hook'
 import { useAppState } from '../utils/innercontext'
 import { Link } from "react-router-dom";
-import { useAuth } from '../hooks/auth.hook';
 
 export const Clients = () => {
 
 	const [users, setUsers] = useState([])
 	const { request, loading } = useHttp()
-	const { state, dispatch } = useAppState()
+	const { state } = useAppState()
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(async () => {

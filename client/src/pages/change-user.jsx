@@ -4,12 +4,12 @@ import { useAppState } from '../utils/innercontext'
 
 export const ChangeUser = (props) => {
 	const id = props.location.state.id
-	const [user, setUser] = useState({name: "", surname: "", phone: "", mail: "", type: ""})
+	const [user, setUser] = useState({ name: "", surname: "", phone: "", mail: "", type: "" })
 	const { request } = useHttp()
-	const {state, dispatch} = useAppState()
+	const { state } = useAppState()
 
 	const changeHadler = event => {
-		setUser({...user, type: event.target.value})
+		setUser({ ...user, type: event.target.value })
 	}
 
 	const getUser = useCallback(async () => {
@@ -19,6 +19,7 @@ export const ChangeUser = (props) => {
 		} catch (e) {
 			console.log('CHANGE_USER', e)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [request])
 
 	const sendReqHandler = async () => {
@@ -28,11 +29,12 @@ export const ChangeUser = (props) => {
 			// setTimeout(()=> window.location.replace("http://localhost:3000/"), 800)
 		} catch (e) {
 			console.log('CHANGE_USER 2', e);
-	  }
+		}
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		getUser()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	return user ? (

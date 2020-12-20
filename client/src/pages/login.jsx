@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { useHttp } from '../hooks/http.hook'
-import { useAppState } from '../utils/innercontext';
 import { useHistory } from "react-router-dom";
 import { useAuth } from '../hooks/auth.hook';
 
 export const Login = () => {
 	const [form, setForm] = useState({ phone: "", password: "" })
-	const {request, loading} = useHttp()
+	const { request, loading } = useHttp()
 	const history = useHistory()
-	const {login} = useAuth()
+	const { login } = useAuth()
 
 	const changeHadler = event => {
 		setForm({ ...form, [event.target.name]: event.target.value })
@@ -16,11 +15,11 @@ export const Login = () => {
 
 	const loginHandler = async (e) => {
 		e.preventDefault()
-		try{
+		try {
 			const response = await request(`/auth/login`, 'POST', { phone: form.phone, password: form.password })
 			login(response.token)
 			history.push('/')
-		} catch(e){
+		} catch (e) {
 			window.M.toast({ html: e })
 		}
 	}
