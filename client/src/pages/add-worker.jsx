@@ -1,40 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useHttp } from '../hooks/http.hook'
+import { useAppState } from '../utils/innercontext'
 
 export const AddWorker = () => {
-	const [categories, setCategory] = useState(null)
+
 	const { request, loading, error, clearError } = useHttp()
-	const [form, setForm] = useState({ title: "", price: "", category: "", quantity: "" })
+	const [form, setForm] = useState({ name: "", surname: "", salary: "", profession: "" })
+	const { state } = useAppState()
+	const history = useHistory();
 
 	const changeHadler = event => {
 		setForm({ ...form, [event.target.name]: event.target.value })
 	}
 
-	const getAllCategories = useCallback(async () => {
-		try {
-			let allCategory = await request('/api/categories', 'GET', null)
-			setCategory(allCategory)
-		} catch (e) {
-			console.log('ADD_WORKER.JSX', e)
-		}
-	}, [request])
-
 	const addHandler = async () => {
 		try {
-			await request('/api/products', 'POST', { ...form })
-			window.M.toast({ html: `Товар добавлен` })
-			setTimeout(()=> window.location.replace("http://localhost:3000/"), 800)
-		} catch (e) { }
+			const resp = await request('/api/workers', 'POST', { ...form }, { 'Authorization': 'Bearer ' + state.token })
+			window.M.toast({ html: resp.message })
+			setTimeout(()=> history.push('/'), 800)
+		} catch (e) { 
+			window.M.toast({html: e})
+		}
 	}
-
-	useEffect(() => {
-		getAllCategories()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	useEffect(() => {
-		window.M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'))
-	}, [categories])
 
 	useEffect(() => {
 		if (error) {
@@ -43,34 +31,32 @@ export const AddWorker = () => {
 		}
 	}, [error, clearError])
 
-	return categories ? (
+	return (
 		<div className='container'>
 			<div className='center-align' style={{ paddingTop: '20px', fontSize: '30px' }}>
-				Добавление товара
+				Добавление рабочего
 			</div>
 			<div className="input-field col s12">
-				<input onChange={changeHadler} value={form.title} id="title" name='title' type="text" className="validate" />
-				<label htmlFor="title">Название</label>
+				<input onChange={changeHadler} value={form.name} id="name" name='name' type="text" className="validate" />
+				<label htmlFor="name">Имя</label>
 			</div>
 			<div className="input-field col s12">
-				<input onChange={changeHadler} value={form.price} id="price" name='price' type="text" className="validate" />
-				<label htmlFor="price">Цена</label>
+				<input onChange={changeHadler} value={form.surname} id="surname" name='surname' type="text" className="validate" />
+				<label htmlFor="surname">Фамилия</label>
 			</div>
 			<div className="input-field col s12">
-				<input onChange={changeHadler} value={form.quantity} id="quantity" name='quantity' type="text" className="validate" />
-				<label htmlFor="quantity">Количество</label>
+				<input onChange={changeHadler} value={form.salary} id="salary" name='salary' type="text" className="validate" />
+				<label htmlFor="salary">Зарплата</label>
 			</div>
-			<button className='dropdown-trigger btn teal darken-3' style={{ minWidth: '200px' }} data-target='dropdown1'>{form.category ? form.category : 'Выберите категорию'}</button>
-			<ul id='dropdown1' className='dropdown-content'>
-				{categories.map((item, id) => {
-					return (
-						<li onClick={() => { setForm({ ...form, category: item.name }) }} key={id}><a href="#!">{item.name}</a></li>
-					)
-				})}
-			</ul>
+			<div className="input-field col s12">
+				<input onChange={changeHadler} value={form.profession} id="profession" name='profession' type="text" className="validate" />
+				<label htmlFor="profession">Профессия</label>
+			</div>
+			
 			<div className='center-align' style={{ paddingTop: '20px' }}>
-				<button onClick={addHandler} className={`waves-effect waves-light btn-large teal darken-3${loading || !(form.category && form.title && form.price && form.quantity) ? ' disabled' : ''}`}>Добавить продукт</button>
+				<button onClick={addHandler} className={`waves-effect waves-light btn-large teal darken-3$`}>Добавить рабочего</button>
 			</div>
+
 		</div>
-	) : (null)
+	)
 }

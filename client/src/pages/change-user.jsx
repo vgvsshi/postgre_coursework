@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useHttp } from '../hooks/http.hook'
 import { useAppState } from '../utils/innercontext'
-import M from 'materialize-css'
 
 export const ChangeUser = (props) => {
 	const id = props.location.state.id
-	const [user, setUser] = useState({ name: "", surname: "", phone: "", mail: "", type: "" })
+	const [user, setUser] = useState({name: "", surname: "", phone: "", mail: "", type: ""})
 	const { request } = useHttp()
-	const { state } = useAppState()
+	const {state, dispatch} = useAppState()
+	const history = useHistory()
 
 	const changeHadler = event => {
-		setUser({ ...user, type: event.target.value })
+		setUser({...user, type: event.target.value})
 	}
 
 	const getUser = useCallback(async () => {
@@ -20,46 +21,36 @@ export const ChangeUser = (props) => {
 		} catch (e) {
 			console.log('CHANGE_USER', e)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [request])
 
 	const sendReqHandler = async () => {
 		try {
 			await request(`/api/users/${id}`, 'PATCH', { type: user.type }, { 'Authorization': 'Bearer ' + state.token }).catch(err => console.log(err))
 			window.M.toast({ html: `Тип изменён` })
-			// setTimeout(()=> window.location.replace("http://localhost:3000/"), 800)
+			setTimeout(()=> history.push('/'), 800)
 		} catch (e) {
 			console.log('CHANGE_USER 2', e);
-		}
+	  }
 	}
 
-	useEffect(() => {
+	useEffect(()=>{
 		getUser()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
-	useEffect(() => {
-		M.updateTextFields()
-	}, [user])
 
 	return user ? (
 		<div className='container'>
-			<div className='center-align' style={{ paddingTop: '20px', fontSize: '30px', marginBottom: '20px' }}>
+			<div className='center-align' style={{ paddingTop: '20px', fontSize: '30px' }}>
 				Изменить тип пользователя
 			</div>
 
+			<h5>Имя: {user.name}</h5>
+			<h5>Фамилия: {user.surname}</h5>
+			<h5>Телефон: {user.phone}</h5>
+			<h5>Почта: {user.mail}</h5>
+			<h5>Компания: {user.company ? user.company : 'Нет'}</h5>
 
-			<ul class="collection">
-				<li class="collection-item">{user.name}</li>
-				<li class="collection-item">{user.surname}</li>
-				<li class="collection-item">{user.phone}</li>
-				<li class="collection-item">{user.mail}</li>
-				<li class="collection-item">{user.company}</li>
-			</ul>
-
-			<div className="input-field col s12" style={{ marginTop: '30px' }}>
+			<div className="input-field col s12">
 				<input onChange={changeHadler} value={user.type} id="type" name='type' type="text" className="validate" />
-				<label for="type">Введите тип пользователя</label>
 			</div>
 
 			<div className='center-align' style={{ paddingTop: '20px' }}>

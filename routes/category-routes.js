@@ -9,6 +9,25 @@ router.get('/', authToken, async (req, res) => {
 	res.json(categories.rows)
 })
 
+router.get('/:id', authToken, async (req, res) => {
+	const { id } = req.params
+	const candidate = await pool.query(`SELECT * FROM category WHERE id = $1`, [id]).catch(e => res.json(e))
+	res.json(candidate)
+
+})
+
+router.patch('/:id', authToken, async (req, res) => {
+	const { id, title } = req.body
+	const db = reconnect(req.payload.type)
+	try{
+		await db.query('UPDATE category SET name = $1 WHERE id = $2 RETURNING *', [title, id])
+		res.status(200).json({message: 'Категория изменена!'})
+	} catch(e){
+		console.log('PRODUCT_ROUTES', e);
+	}
+
+})
+
 router.post('/', authToken, async (req, res) => {
 	const { title } = req.body
 	const db = reconnect(req.payload.type)

@@ -5,7 +5,7 @@ const Pool = require('pg').Pool
 
 const pool = new Pool({
 	user: 'postgres',
-	password: '787898Amir',
+	password: 'SheeshGirl1936',
 	host: 'localhost',
 	port: 5432,
 	database: 'postgres'
@@ -16,7 +16,7 @@ const reconnect = (type) => {
 		case 'admin':
 			return new Pool({
 				user: 'postgres',
-				password: '787898Amir',
+				password: 'SheeshGirl1936',
 				host: 'localhost',
 				port: 5432,
 				database: 'postgres'

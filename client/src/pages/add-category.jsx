@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useHttp } from '../hooks/http.hook'
+import { useAppState } from '../utils/innercontext'
 
 export const AddCategory = () => {
 	const [title, setTitle] = useState('')
 	const { request, loading, error, clearError } = useHttp()
+	const {state} = useAppState()
+	const history = useHistory();
 
 	const addHandler = async () => {
 		try {
-			await request('/api/categories', 'POST', { title })
+			await request('/api/categories', 'POST', { title }, { 'Authorization': 'Bearer ' + state.token })
 			window.M.toast({ html: `Категория добавлена` })
+			setTimeout(() => {
+				history.push('/')
+			}, 800);
 		} catch (e) { }
 	}
 

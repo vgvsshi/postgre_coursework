@@ -27,7 +27,7 @@ router.post('/', authToken, async (req, res) => {
 	}
 
 	await db.query('INSERT INTO product (name, price, category_id, quantity) values ($1, $2, $3, $4) RETURNING *', [name, price, category_id, quantity]).catch(e => res.json(e))
-	res.sendStatus(200)
+	res.status(200).json({message: 'Продукт добавлен!'})
 })
 
 router.patch('/:id', authToken, async (req, res) => {
@@ -35,19 +35,19 @@ router.patch('/:id', authToken, async (req, res) => {
 	const db = reconnect(req.payload.type)
 	try{
 		await db.query('UPDATE product SET name = $1, price = $2, category_id = $3, quantity = $4 WHERE id = $5 RETURNING *', [name, price, category_id, quantity, id])
-		res.sendStatus(200)
+		res.status(200).json({message: 'Продукт изменён!'})
 	} catch(e){
 		console.log('PRODUCT_ROUTES', e);
 	}
 
 })
 
-router.post('/delete', async (req, res) => {
+router.post('/delete', authToken, async (req, res) => {
 	const { id } = req.body
 	const db = reconnect(req.payload.type)
 	await db.query(`DELETE FROM product WHERE product.id = '${id}'`)
 
-	res.json('Продукт удален')
+	res.status(200).json({message: 'Продукт удалён!'})
 })
 
 module.exports = router

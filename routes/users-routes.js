@@ -18,13 +18,13 @@ router.get('/:id', authToken, async (req, res) => {
 router.patch('/:id', authToken, async (req, res) => {
 	const db = reconnect(req.payload.type)
 	await db.query(`UPDATE "user" SET type = $1 WHERE id = ${req.params.id}`, [req.body.type]).catch(err => res.json({error: err}))
-	res.sendStatus(200)
+	res.status(200).json({message: 'Пользователь изменён!'})
 })
 
 router.delete('/:id', authToken, async (req, res) => {
 	const db = reconnect(req.payload.type)
 	await db.query(`DELETE FROM "user" WHERE id = ${req.params.id} LIMIT 1`).catch(err => res.json({error: err}))
-	res.sendStatus(200)
+	res.status(200).json({message: 'Пользователь удалён!'})
 })
 
 router.post('/', authToken, async (req, res) => {
@@ -34,7 +34,7 @@ router.post('/', authToken, async (req, res) => {
 				.query('INSERT INTO "user" (name, surname, salary, profession) values ($1, $2, $3, $4) RETURNING *', [ name, surname, salary, profession ])
 				.catch(err => res.json({error: err}))
 
-	res.sendStatus(200)
+	res.status(200).json({message: 'Пользователь удалён!'})
 })
 
 module.exports = router

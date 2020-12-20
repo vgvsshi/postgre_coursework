@@ -22,7 +22,6 @@ export const Main = () => {
 
 	useEffect(() => {
 		getAllProds()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	const byField = (field) => {
@@ -54,12 +53,15 @@ export const Main = () => {
 		return totalPrice = totalPrice + item.price * item.amount
 	})
 
-	const sendOrder = async () => {
-		if (state.token) {
+	const sendOrder = async () =>{
+		if(state.token){
 			const what = await request('/api/orders', 'POST', { token: state.token, products: [...cart], sum: totalPrice })
-			console.log(what);
-			setCart(null)
-		} else {
+			window.M.toast({html:what.message})
+			setTimeout(() => {
+				history.push('/')
+			}, 800);
+			setCart([])
+		} else{
 			history.push('/login')
 		}
 	}
@@ -116,7 +118,7 @@ export const Main = () => {
 	) :
 		(
 			<div className='main'>
-				<div style={{ marginTop: '100px' }} className="preloader-wrapper big active">
+				<div className="preloader-wrapper big active">
 					<div className="spinner-layer spinner-green-only">
 						<div className="circle-clipper left">
 							<div className="circle"></div>
