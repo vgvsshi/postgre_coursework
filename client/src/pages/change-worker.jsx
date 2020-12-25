@@ -14,7 +14,7 @@ export const ChangeWorker = ({match}) => {
 
 	const changeHadler = event => {
 		let parsed = event.target.value
-		if(!isNaN(parsed) && parsed.length != 0){
+		if(!isNaN(parsed) && parsed.length !== 0){
 			parsed = parseInt(parsed)
 		}
 		setWorker({ ...worker, [event.target.name]: parsed })
@@ -27,6 +27,7 @@ export const ChangeWorker = ({match}) => {
 		} catch (e) {
 			console.log('CHANGE_PRODUCT 1', e)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [request])
 
 	const sendReqHandler = async (e) => {
@@ -42,6 +43,7 @@ export const ChangeWorker = ({match}) => {
 
 	useEffect(()=>{
 		getWorker()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(()=>{

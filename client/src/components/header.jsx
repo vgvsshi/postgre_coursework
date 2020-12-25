@@ -21,6 +21,7 @@ export const Header = () => {
 	const getType = async () => {
 		if (state.token !== null) {
 			const response = await request(`/auth/check`, 'GET', null, { 'Authorization': 'Bearer ' + state.token })
+			console.log(response);
 			if (response.type === 'admin') {
 				setNavContent(
 					<ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -43,6 +44,13 @@ export const Header = () => {
 				setNavContent(
 					<ul id="nav-mobile" className="right hide-on-med-and-down">
 						<li><Link to='/' onClick={e => logout()}>Выйти</Link></li>
+					</ul>
+				)
+			} else if (response.type === 'logout'){
+				setNavContent(
+					<ul id="nav-mobile" className="right hide-on-med-and-down">
+						<li><Link to='/login'>Войти</Link></li>
+						<li><Link to='/register'>Зарегестрироваться</Link></li>
 					</ul>
 				)
 			}

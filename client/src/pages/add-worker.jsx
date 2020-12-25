@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useHttp } from '../hooks/http.hook'
 import { useAppState } from '../utils/innercontext'
 
 export const AddWorker = () => {
 
-	const { request, loading, error, clearError } = useHttp()
+	const { request, error, clearError } = useHttp()
 	const [form, setForm] = useState({ name: "", surname: "", salary: "", profession: "" })
 	const { state } = useAppState()
 	const history = useHistory();
