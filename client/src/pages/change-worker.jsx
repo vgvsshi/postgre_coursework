@@ -27,7 +27,6 @@ export const ChangeWorker = ({ match }) => {
 		} catch (e) {
 			console.log('CHANGE_PRODUCT 1', e)
 		}
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [request])
 

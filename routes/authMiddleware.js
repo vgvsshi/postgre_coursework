@@ -7,7 +7,7 @@ function authToken(req, res, next) {
 	if(token == null) return res.status(400).json({message: 'Токен пуст'})
 
 	jwt.verify(token, process.env.ACCESS_TOKEN, async (err, decoded) => {
-		if (err) return res.status(400).json({message: 'Невалидный токен'})
+		if (err) return res.json({type: 'logout'})
 	
 		const db = reconnect('admin')
 		const candidate = await db.query('SELECT type FROM "user" WHERE phone = $1', [decoded.phone])
